@@ -65,7 +65,7 @@ for item in aw.find_all("a", "wasteInfoIcon textDecorationNone"):
         waste_type = item.p["class"][0]
 
     if not waste_types or waste_type in waste_types:
-      raw_d = re.search("(\w+) (\d+) (\w+)( (\d+))?", item.p.text)
+      raw_d = re.search(r"(\w+) (\d+) (\w+)( (\d+))?", item.p.text)
       item_date = date(int(raw_d.group(5) or date.today().year), months.get(raw_d.group(3), 0), int(raw_d.group(2)))
       item_descr = item.find("span", {"class": "afvaldescr"}).text
 
@@ -74,8 +74,8 @@ for item in aw.find_all("a", "wasteInfoIcon textDecorationNone"):
       event.add("dtstamp", datetime.now())
       event.add("dtstart", item_date)
       event.add("dtend", item_date + timedelta(1))
-      event.add("summary", "Afval - {0}".format(item_descr.replace("\,", ",")))
-      event.add("description", item_descr.replace("\,", ","))
+      event.add("summary", "Afval - {0}".format(item_descr.replace("\\,", ",")))
+      event.add("description", item_descr.replace("\\,", ","))
       event.add_component(alarm)
 
       cal.add_component(event)
